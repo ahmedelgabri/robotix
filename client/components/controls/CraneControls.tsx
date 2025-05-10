@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import { Updater } from "@/state/robot/useSocket";
 import { Command } from "@/state/robot/actions";
 import CoordinateInput from "./CoordinateInput";
@@ -61,7 +61,7 @@ const CraneControls: FC<Props> = ({ dispatch, toggleDebug }) => {
         });
     };
 
-    const commandForKey = (e: KeyboardEvent) => {
+    const commandForKey = useCallback((e: KeyboardEvent) => {
         let command: Command | null = null;
         if (typeof e.key === "undefined") {
             return command;
@@ -98,7 +98,7 @@ const CraneControls: FC<Props> = ({ dispatch, toggleDebug }) => {
         }
 
         return command
-    }
+    },[gripperMode])
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -128,7 +128,7 @@ const CraneControls: FC<Props> = ({ dispatch, toggleDebug }) => {
             window.removeEventListener('keydown', handleKeyDown);
             window.removeEventListener('keyup', handleKeyUp);
         };
-    }, [gripperMode]);
+    }, [commandForKey, gripperMode]);
 
     useEffect(() => {
         if (activeCommands.size > 0) {
