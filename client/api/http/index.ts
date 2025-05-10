@@ -1,55 +1,97 @@
-import { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
-
-// This Http class wraps a provider (in this case an axios instance)
+// This Http class wraps a provider (in this case fetch)
 // which should be used to make network requests in the app
+
+type Fetch = typeof fetch
+type ValidateStatus = (response: Response) => boolean
+
 export class Http {
-  private http: AxiosInstance;
+	#http: Fetch
+	#baseUrl: string
+	#extraHeaders: HeadersInit
+	#validateStatus: ValidateStatus
 
-  constructor(http: AxiosInstance) {
-    this.http = http;
-  }
+	constructor({
+		http,
+		baseUrl,
+		headers,
+		validateStatus,
+	}: {
+		http: Fetch
+		baseUrl: string
+		headers: HeadersInit
+		validateStatus: ValidateStatus
+	}) {
+		this.#http = http
+		this.#baseUrl = baseUrl
+		this.#extraHeaders = headers
+		this.#validateStatus = validateStatus
+	}
 
-  private headers(contentType: string) {
-    let headers: Record<string, string> = {
-      "Content-Type": contentType,
-      "Custom-User-Agent": `orimboard/v0.1.0`,
-    };
+	#headers(contentType: string): Headers {
+		return new Headers({
+			...this.#extraHeaders,
+			'Content-Type': contentType,
+			'Custom-User-Agent': `orimboard/v0.1.0`,
+		})
+	}
 
-    return headers;
-  }
+	#config(params = {}, contentType = 'application/json'): RequestInit {
+		return {
+			...params,
+			headers: this.#headers(contentType),
+		}
+	}
 
-  private config(
-    params = {},
-    contentType = "application/json",
-  ): AxiosRequestConfig {
-    return {
-      params,
-      headers: this.headers(contentType),
-    };
-  }
+	#getUrl(url: string): string {
+		return new URL(url, this.#baseUrl).toString()
+	}
 
-  get<T>(url = "", params = {}): Promise<AxiosResponse<T>> {
-    const request = this.http.get<T>(url, this.config(params));
-    return request;
-  }
+	async get(url = '', params = {}): Promise<ReturnType<Response['json']>> {
+		const request = await this.#http(
+			this.#getUrl(url),
+			this.#config({...params, method: 'get'}),
+		)
 
-  post<T>(url = "", data = {}): Promise<AxiosResponse<T>> {
-    const request = this.http.post<T>(url, data, this.config({}));
-    return request;
-  }
+		this.#validateStatus(request)
 
-  put<T>(url = "", data = {}): Promise<AxiosResponse<T>> {
-    const request = this.http.put<T>(url, data, this.config({}));
-    return request;
-  }
+		return await request.json()
+	}
 
-  patch<T>(url = "", data = {}): Promise<AxiosResponse<T>> {
-    const request = this.http.patch<T>(url, data, this.config({}));
-    return request;
-  }
+	async post(url = '', data = {}): Promise<ReturnType<Response['json']>> {
+		const request = await this.#http(
+			this.#getUrl(url),
+			this.#config({body: JSON.stringify(data), method: 'post'}),
+		)
 
-  delete<T>(url = ""): Promise<AxiosResponse<T>> {
-    const request = this.http.patch<T>(url, this.config({}));
-    return request;
-  }
+		this.#validateStatus(request)
+
+		return await request.json()
+	}
+
+	async put(url = '', data = {}): Promise<ReturnType<Response['json']>> {
+		const request = await this.#http(
+			this.#getUrl(url),
+			this.#config({body: JSON.stringify(data), method: 'put'}),
+		)
+		this.#validateStatus(request)
+		return await request.json()
+	}
+
+	async patch(url = '', data = {}): Promise<ReturnType<Response['json']>> {
+		const request = await this.#http(
+			this.#getUrl(url),
+			this.#config({body: JSON.stringify(data), method: 'patch'}),
+		)
+		this.#validateStatus(request)
+		return await request.json()
+	}
+
+	async delete(url = ''): Promise<ReturnType<Response['json']>> {
+		const request = await this.#http(
+			this.#getUrl(url),
+			this.#config({method: 'delete'}),
+		)
+		this.#validateStatus(request)
+		return await request.json()
+	}
 }

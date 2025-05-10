@@ -1,40 +1,37 @@
 {
-  "name": "client",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
-  "dependencies": {
-    "@react-three/drei": "^10.0.7",
-    "@react-three/fiber": "^9.1.2",
-    "@types/three": "^0.176.0",
-    "axios": "^1.9.0",
-    "cd": "^0.3.3",
-    "daisyui": "^5.0.28",
-    "lucide-react": "^0.503.0",
-    "next": "15.3.1",
-    "qs": "^6.14.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "server": "^1.0.41",
-    "swr": "^2.3.3",
-    "three": "^0.176.0",
-    "typescript-result": "^3.1.1"
-  },
-  "devDependencies": {
-    "@eslint/eslintrc": "^3",
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/qs": "^6.9.18",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "15.3.1",
-    "tailwindcss": "^4",
-    "typescript": "^5"
-  }
+	"name": "client",
+	"version": "0.1.0",
+	"private": true,
+	"scripts": {
+		"dev": "next dev --turbopack",
+		"build": "next build",
+		"start": "next start",
+		"lint": "next lint"
+	},
+	"dependencies": {
+		"@react-three/drei": "^10.0.7",
+		"@react-three/fiber": "^9.1.2",
+		"@types/three": "^0.176.0",
+		"cd": "^0.3.3",
+		"daisyui": "^5.0.28",
+		"lucide-react": "^0.503.0",
+		"next": "15.3.1",
+		"react": "^19.0.0",
+		"react-dom": "^19.0.0",
+		"server": "^1.0.41",
+		"swr": "^2.3.3",
+		"three": "^0.176.0",
+		"typescript-result": "^3.1.1"
+	},
+	"devDependencies": {
+		"@eslint/eslintrc": "^3",
+		"@tailwindcss/postcss": "^4",
+		"@types/node": "^20",
+		"@types/react": "^19",
+		"@types/react-dom": "^19",
+		"eslint": "^9",
+		"eslint-config-next": "15.3.1",
+		"tailwindcss": "^4",
+		"typescript": "^5"
+	}
 }
