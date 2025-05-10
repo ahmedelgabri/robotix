@@ -4,9 +4,9 @@
 .DEFAULT_GOAL := help
 
 # Colors for help output
-BLUE := \033[34m
-GREEN := \033[32m
-RESET := \033[0m
+BLUE := $(shell echo -e "\033[34m")
+GREEN := $(shell echo -e "\033[32m")
+RESET := $(shell echo -e "\033[0m")
 
 help: ## display this help message
 	@echo "$(BLUE)Available targets:$(RESET)"
